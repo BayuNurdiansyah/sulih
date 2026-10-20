@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" font-family="Inter, Arial, sans-serif">
+  <title>Tahapan migrasi PHP native ke Laravel</title>
+  <rect width="1200" height="520" fill="#f8fafc"/>
+  <text x="600" y="60" text-anchor="middle" font-size="30" font-weight="700" fill="#0f172a">6 Tahapan Migrasi PHP Native ke Laravel</text>
+  <text x="600" y="95" text-anchor="middle" font-size="18" fill="#475569">Bertahap per modul, aplikasi lama tetap berjalan</text>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker>
+  </defs>
+  <g font-size="17">
+    <g transform="translate(60,140)"><rect width="320" height="140" rx="16" fill="#fff" stroke="#e2e8f0" stroke-width="2"/><circle cx="40" cy="40" r="22" fill="#ef4444"/><text x="40" y="47" text-anchor="middle" fill="#fff" font-weight="700" font-size="20">1</text><text x="75" y="47" font-weight="700" fill="#0f172a">Audit &amp; masuk Git</text><text x="24" y="95" fill="#475569">Ambil versi produksi, catat</text><text x="24" y="120" fill="#475569">PHP, ekstensi, cron, database</text></g>
+    <g transform="translate(440,140)"><rect width="320" height="140" rx="16" fill="#fff" stroke="#e2e8f0" stroke-width="2"/><circle cx="40" cy="40" r="22" fill="#ef4444"/><text x="40" y="47" text-anchor="middle" fill="#fff" font-weight="700" font-size="20">2</text><text x="75" y="47" font-weight="700" fill="#0f172a">Petakan modul</text><text x="24" y="95" fill="#475569">Pecah per fitur, urutkan</text><text x="24" y="120" fill="#475569">dari yang paling bermasalah</text></g>
+    <g transform="translate(820,140)"><rect width="320" height="140" rx="16" fill="#fff" stroke="#e2e8f0" stroke-width="2"/><circle cx="40" cy="40" r="22" fill="#ef4444"/><text x="40" y="47" text-anchor="middle" fill="#fff" font-weight="700" font-size="20">3</text><text x="75" y="47" font-weight="700" fill="#0f172a">Laravel berdampingan</text><text x="24" y="95" fill="#475569">Proyek baru terhubung ke</text><text x="24" y="120" fill="#475569">database yang sama</text></g>
+    <g transform="translate(820,330)"><rect width="320" height="140" rx="16" fill="#fff" stroke="#e2e8f0" stroke-width="2"/><circle cx="40" cy="40" r="22" fill="#ef4444"/><text x="40" y="47" text-anchor="middle" fill="#fff" font-weight="700" font-size="20">4</text><text x="75" y="47" font-weight="700" fill="#0f172a">Pindah per modul</text><text x="24" y="95" fill="#475569">Routing diarahkan bertahap</text><text x="24" y="120" fill="#475569">(strangler pattern)</text></g>
+    <g transform="translate(440,330)"><rect width="320" height="140" rx="16" fill="#fff" stroke="#e2e8f0" stroke-width="2"/><circle cx="40" cy="40" r="22" fill="#ef4444"/><text x="40" y="47" text-anchor="middle" fill="#fff" font-weight="700" font-size="20">5</text><text x="75" y="47" font-weight="700" fill="#0f172a">Uji data nyata</text><text x="24" y="95" fill="#475569">Salinan database produksi</text><text x="24" y="120" fill="#475569">di server staging</text></g>
+    <g transform="translate(60,330)"><rect width="320" height="140" rx="16" fill="#fff" stroke="#e2e8f0" stroke-width="2"/><circle cx="40" cy="40" r="22" fill="#16a34a"/><text x="40" y="47" text-anchor="middle" fill="#fff" font-weight="700" font-size="20">6</text><text x="75" y="47" font-weight="700" fill="#0f172a">Rilis &amp; pantau</text><text x="24" y="95" fill="#475569">Satu modul per rilis, cek</text><text x="24" y="120" fill="#475569">log error dan masukan</text></g>
+  </g>
+  <g stroke="#94a3b8" stroke-width="3" marker-end="url(#a)" fill="none">
+    <line x1="385" y1="210" x2="432" y2="210"/>
+    <line x1="765" y1="210" x2="812" y2="210"/>
+    <line x1="980" y1="285" x2="980" y2="322"/>
+    <line x1="815" y1="400" x2="768" y2="400"/>
+    <line x1="435" y1="400" x2="388" y2="400"/>
+  </g>
+</svg>

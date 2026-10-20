@@ -2,7 +2,7 @@
 title: "Migrasi PHP Native ke Laravel: Tanda, Tahapan & Risiko"
 description: "Kapan aplikasi PHP lama perlu dimigrasi ke Laravel, tahapan migrasi bertahap yang aman, risiko yang perlu diantisipasi, dan cara memperkirakan biayanya."
 pubDate: "2026-10-20"
-heroImage: "/images/tahapan-migrasi-php-ke-laravel.svg"
+heroImage: "../../assets/tahapan-migrasi-php-ke-laravel.svg"
 heroAlt: "Diagram enam tahapan migrasi aplikasi PHP native ke Laravel, dari audit kode sampai rilis bertahap"
 ---
 
@@ -28,7 +28,7 @@ Jika dua atau lebih tanda di atas terjadi, migrasi biasanya lebih murah dalam ja
 
 ## Tahapan Migrasi yang Aman
 
-![Diagram enam tahapan migrasi aplikasi PHP native ke Laravel](/images/tahapan-migrasi-php-ke-laravel.svg)
+![Diagram enam tahapan migrasi aplikasi PHP native ke Laravel](../../assets/tahapan-migrasi-php-ke-laravel.svg)
 
 ### 1. Audit dan amankan kode yang berjalan
 Ambil versi yang benar-benar berjalan di server produksi, bukan salinan lama di laptop. Catat versi PHP, ekstensi, cron job, dan struktur database, lalu masukkan semuanya ke Git. Di salah satu proyek yang kami tangani, versi di server ternyata berbeda dengan salinan yang dimiliki tim. Langkah pertama justru merapikan versi produksi dan memasukkannya ke Git sebelum menulis satu baris kode Laravel pun.
