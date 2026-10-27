@@ -8,35 +8,39 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://sulih.vercel.app',
-  integrations: [mdx(), sitemap()],
-
-  fonts: [
-      {
-          provider: fontProviders.local(),
-          name: 'Atkinson',
-          cssVariable: '--font-atkinson',
-          fallbacks: ['sans-serif'],
-          options: {
-              variants: [
-                  {
-                      src: ['./src/assets/fonts/atkinson-regular.woff'],
-                      weight: 400,
-                      style: 'normal',
-                      display: 'swap',
-                  },
-                  {
-                      src: ['./src/assets/fonts/atkinson-bold.woff'],
-                      weight: 700,
-                      style: 'normal',
-                      display: 'swap',
-                  },
-              ],
-          },
-      },
+	site: 'https://sulih.vercel.app',
+	trailingSlash: 'always',
+	build: {
+		inlineStylesheets: 'always',
+	},
+	integrations: [
+		mdx(),
+		sitemap({
+			changefreq: 'monthly',
+			lastmod: new Date(),
+		}),
 	],
 
-  vite: {
-    plugins: [tailwindcss()],
-  },
+	fonts: [
+		{
+			provider: fontProviders.local(),
+			name: 'Plus Jakarta Sans',
+			cssVariable: '--font-jakarta',
+			fallbacks: ['system-ui', 'sans-serif'],
+			options: {
+				variants: [
+					{
+						src: ['./src/assets/fonts/plus-jakarta-sans-latin.woff2'],
+						weight: '200 800',
+						style: 'normal',
+						display: 'swap',
+					},
+				],
+			},
+		},
+	],
+
+	vite: {
+		plugins: [tailwindcss()],
+	},
 });

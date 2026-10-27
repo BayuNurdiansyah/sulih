@@ -4,9 +4,9 @@ description: "Kapan aplikasi PHP lama perlu dimigrasi ke Laravel, tahapan migras
 pubDate: "2026-10-20"
 heroImage: "../../assets/tahapan-migrasi-php-ke-laravel.svg"
 heroAlt: "Diagram enam tahapan migrasi aplikasi PHP native ke Laravel, dari audit kode sampai rilis bertahap"
+ogImage: "/og/migrasi-php-native-ke-laravel.jpg"
+updatedDate: "2026-10-27"
 ---
-
-# Migrasi PHP Native ke Laravel: Kapan Perlu dan Bagaimana Caranya
 
 Migrasi PHP native ke Laravel layak dipertimbangkan ketika aplikasi lama makin sulit dirawat, masih berjalan di versi PHP yang sudah tidak mendapat pembaruan keamanan, atau setiap fitur baru terasa lebih lama dikerjakan daripada seharusnya. Kabar baiknya, migrasi tidak harus berupa "tulis ulang semuanya sekaligus". Cara yang lebih aman adalah memindahkan sistem **modul demi modul** sementara aplikasi lama tetap melayani pengguna.
 
@@ -18,7 +18,7 @@ PHP native adalah aplikasi yang ditulis tanpa framework: logika, query database,
 
 ## Tanda Aplikasi PHP Lama Perlu Dimigrasi
 
-1. **Versi PHP sudah usang.** Versi seperti PHP 5.x dan 7.x sudah tidak lagi menerima perbaikan keamanan resmi. Cek jadwal dukungan di halaman resmi [PHP Supported Versions](https://www.php.net/supported-versions.php).
+1. **Versi PHP sudah usang.** PHP 8.1 ke bawah, termasuk PHP 5.x dan 7.x, sudah tidak menerima perbaikan keamanan resmi, dan dukungan PHP 8.2 berakhir 31 Desember 2026. Cek jadwal dukungan di halaman resmi [PHP Supported Versions](https://www.php.net/supported-versions.php).
 2. **Kode tidak ada di version control.** Perubahan langsung diedit di server, sehingga tidak ada riwayat dan sulit rollback.
 3. **Satu perubahan merusak bagian lain.** Logika tersebar dan tidak ada pengujian.
 4. **Hanya satu orang yang paham kodenya.** Risiko besar ketika orang tersebut tidak lagi tersedia.
@@ -28,10 +28,8 @@ Jika dua atau lebih tanda di atas terjadi, migrasi biasanya lebih murah dalam ja
 
 ## Tahapan Migrasi yang Aman
 
-![Diagram enam tahapan migrasi aplikasi PHP native ke Laravel](../../assets/tahapan-migrasi-php-ke-laravel.svg)
-
 ### 1. Audit dan amankan kode yang berjalan
-Ambil versi yang benar-benar berjalan di server produksi, bukan salinan lama di laptop. Catat versi PHP, ekstensi, cron job, dan struktur database, lalu masukkan semuanya ke Git. Di salah satu proyek yang kami tangani, versi di server ternyata berbeda dengan salinan yang dimiliki tim. Langkah pertama justru merapikan versi produksi dan memasukkannya ke Git sebelum menulis satu baris kode Laravel pun.
+Ambil versi yang benar-benar berjalan di server produksi, bukan salinan lama di laptop. Catat versi PHP, ekstensi, cron job, dan struktur database, lalu masukkan semuanya ke Git. Di salah satu proyek yang kami tangani, aplikasi yang sudah lama berjalan di produksi belum pernah masuk Git. Langkah pertama justru mengecek versi yang berjalan di server, memperbaruinya, dan memasukkannya ke Git sebelum menulis satu baris kode Laravel pun.
 
 ### 2. Petakan modul dan tentukan prioritas
 Pecah aplikasi menjadi modul (misalnya login, data master, transaksi, laporan). Mulai dari modul yang paling sering bermasalah atau paling sering diminta perubahan.
@@ -75,7 +73,7 @@ Untuk aplikasi kecil yang rapi, kadang cukup. Namun jika kodenya sulit dirawat, 
 
 ## Mulai dari Audit
 
-Jika aplikasi PHP lama Anda menunjukkan tanda-tanda di atas, langkah paling aman adalah audit terlebih dahulu. Lihat [layanan migrasi Sulih](/layanan) atau [hubungi kami](/kontak) untuk konsultasi awal.
+Jika aplikasi PHP lama Anda menunjukkan tanda-tanda di atas, langkah paling aman adalah audit terlebih dahulu. Lihat [jasa migrasi PHP ke Laravel dari Sulih](/jasa-migrasi-php-ke-laravel/) atau [hubungi kami](/kontak/) untuk audit gratis.
 
 **Sumber:**
 - [PHP Supported Versions](https://www.php.net/supported-versions.php), php.net

@@ -1,0 +1,449 @@
+---
+import CodeDiff from '../components/CodeDiff.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { CITY, LANDING_PATH, OWNER_NAME, SITE_URL, waLink } from '../consts';
+
+const title = 'Jasa Migrasi PHP ke Laravel, Aman Tanpa Downtime | Sulih';
+const description =
+	'Jasa migrasi PHP native dan CodeIgniter ke Laravel, bertahap per modul. Data tetap utuh, aplikasi tetap jalan. Audit gratis untuk sekolah, UMKM, dan koperasi.';
+const pageUrl = new URL(LANDING_PATH, SITE_URL).href;
+const auditMessage = 'Halo Sulih, saya ingin audit gratis untuk migrasi aplikasi PHP ke Laravel.';
+
+const diffLines = [
+	{ type: 'ctx', text: '// Ambil data siswa berdasarkan NIS' },
+	{ type: 'del', text: '$q = mysql_query("SELECT * FROM siswa' },
+	{ type: 'del', text: '        WHERE nis=\'" . $_GET[\'nis\'] . "\'");' },
+	{ type: 'del', text: '$row = mysql_fetch_array($q);' },
+	{ type: 'add', text: '$siswa = Siswa::where(\'nis\', $request->nis)' },
+	{ type: 'add', text: '    ->firstOrFail();' },
+	{ type: 'add', text: 'return view(\'siswa.show\', compact(\'siswa\'));' },
+] as const;
+
+const signs = [
+	{
+		title: 'Masih berjalan di PHP 7 atau PHP 5',
+		body: 'PHP 8.1 ke bawah sudah tidak menerima perbaikan keamanan resmi, dan dukungan PHP 8.2 berakhir 31 Desember 2026.',
+	},
+	{
+		title: 'Kode tidak tersimpan di Git',
+		body: 'Perubahan diedit langsung di server. Tidak ada riwayat, sulit dikembalikan kalau ada yang rusak.',
+	},
+	{
+		title: 'Satu perbaikan merusak fitur lain',
+		body: 'Query, logika, dan tampilan bercampur dalam satu file sehingga efek perubahan sulit ditebak.',
+	},
+	{
+		title: 'Hanya satu orang yang paham kodenya',
+		body: 'Ketika developer lama tidak lagi tersedia, aplikasi tidak berani disentuh.',
+	},
+	{
+		title: 'Query rawan SQL injection',
+		body: 'Input pengguna langsung ditempel ke query, seperti contoh di atas. Celah ini salah satu yang paling sering dieksploitasi.',
+	},
+	{
+		title: 'Fitur baru makin lama selesai',
+		body: 'Integrasi API, notifikasi WhatsApp, atau laporan baru terasa mahal karena fondasinya rapuh.',
+	},
+];
+
+const results = [
+	{
+		title: 'Aplikasi Laravel dengan alur yang sama',
+		body: 'Menu, istilah, dan alur kerja dipertahankan supaya pengguna tidak perlu belajar ulang.',
+	},
+	{
+		title: 'Database lama tetap dipakai',
+		body: 'Tidak ada input ulang data. Struktur tabel dirapikan bertahap memakai migration Laravel.',
+	},
+	{
+		title: 'Seluruh kode di repositori Git milik Anda',
+		body: 'Lengkap dengan riwayat perubahan. Anda pemilik penuh kode setelah serah terima.',
+	},
+	{
+		title: 'Dokumentasi serah terima',
+		body: 'Cara instalasi, deploy, backup, dan daftar modul, ditulis untuk tim IT Anda.',
+	},
+	{
+		title: 'Garansi perbaikan bug 30 hari',
+		body: 'Bug yang muncul dari hasil migrasi diperbaiki tanpa biaya tambahan.',
+	},
+	{
+		title: 'Pilihan perawatan bulanan',
+		body: 'Pembaruan keamanan, backup, dan perbaikan kecil setelah masa garansi selesai.',
+	},
+];
+
+const steps = [
+	{
+		title: 'Audit gratis',
+		body: 'Kami membaca kode dan struktur database, lalu mengirim laporan risiko serta estimasi waktu dan biaya secara tertulis.',
+	},
+	{
+		title: 'Amankan kode produksi ke Git',
+		body: 'Versi yang benar-benar berjalan di server diambil dan disimpan ke Git, bukan salinan lama di laptop.',
+	},
+	{
+		title: 'Petakan modul dan prioritas',
+		body: 'Aplikasi dipecah menjadi modul. Yang paling sering bermasalah atau paling penting dikerjakan lebih dulu.',
+	},
+	{
+		title: 'Siapkan Laravel berdampingan',
+		body: 'Proyek Laravel dipasang di samping aplikasi lama dan memakai database yang sama. Pengguna belum merasakan perubahan.',
+	},
+	{
+		title: 'Pindahkan dan uji per modul',
+		body: 'Setiap modul diuji di server staging dengan salinan data nyata agar kasus aneh dari data lama ketahuan sebelum rilis.',
+	},
+	{
+		title: 'Rilis bertahap dan serah terima',
+		body: 'Modul dirilis satu per satu sambil memantau log error. Setelah semua selesai, kode dan dokumentasi diserahkan.',
+	},
+];
+
+const segments = [
+	{ title: 'Sekolah dan kampus', body: 'Sistem akademik, penerimaan siswa atau mahasiswa baru, nilai, dan presensi.' },
+	{ title: 'UMKM', body: 'Aplikasi kasir, stok gudang, pemesanan, dan laporan penjualan.' },
+	{ title: 'Koperasi', body: 'Simpan pinjam, angsuran anggota, dan perhitungan SHU.' },
+	{ title: 'Yayasan dan instansi', body: 'Kepegawaian, penggajian, donasi, dan persuratan.' },
+];
+
+const costFactors = [
+	{ factor: 'Jumlah modul dan halaman', effect: 'Semakin banyak modul, semakin panjang pengerjaan dan pengujian.' },
+	{ factor: 'Kondisi database', effect: 'Tabel tanpa relasi jelas atau data ganda butuh waktu pembersihan.' },
+	{ factor: 'Integrasi pihak ketiga', effect: 'Payment gateway, API bank, atau WhatsApp perlu diuji ulang.' },
+	{ factor: 'Dokumentasi dan akses server', effect: 'Akses lengkap ke server dan database mempercepat audit.' },
+	{ factor: 'Tenggat waktu', effect: 'Jadwal yang sangat mepet berarti lebih banyak modul dikerjakan bersamaan.' },
+];
+
+const faqs = [
+	{
+		q: 'Apakah aplikasi harus berhenti selama migrasi?',
+		a: 'Tidak. Laravel dipasang berdampingan dengan aplikasi lama, dan modul dipindahkan satu per satu. Pengguna tetap bekerja seperti biasa sampai modul penggantinya siap.',
+	},
+	{
+		q: 'Apakah data lama aman?',
+		a: 'Backup penuh dibuat sebelum setiap rilis, dan setiap modul diuji dulu di server staging memakai salinan data. Database produksi tidak diubah sebelum modul lolos pengujian.',
+	},
+	{
+		q: 'Berapa lama proses migrasi ke Laravel?',
+		a: 'Aplikasi kecil dengan beberapa modul biasanya selesai dalam hitungan minggu, sistem besar bisa beberapa bulan. Estimasi pasti per modul diberikan setelah audit.',
+	},
+	{
+		q: 'Aplikasi saya memakai CodeIgniter 3. Bisa dimigrasi?',
+		a: 'Bisa. CodeIgniter 4 tidak kompatibel langsung dengan CodeIgniter 3, jadi pindah ke CI4 pun hampir sama dengan menulis ulang. Karena itu banyak pemilik aplikasi memilih langsung ke Laravel.',
+	},
+	{
+		q: 'Apakah cukup upgrade versi PHP saja?',
+		a: 'Untuk aplikasi kecil yang kodenya rapi, kadang cukup. Kalau kodenya sulit dirawat, upgrade versi hanya menunda masalah. Hasil audit akan menyebutkan pilihan mana yang lebih masuk akal.',
+	},
+	{
+		q: 'Apakah tampilannya bisa sekalian diperbarui?',
+		a: 'Bisa, tetapi kami sarankan memindahkan fungsi dulu dengan tampilan yang mirip, baru memperbarui tampilan setelah sistem stabil. Risiko dan biaya jadi lebih terkendali.',
+	},
+	{
+		q: 'Apakah melayani klien di luar Yogyakarta?',
+		a: 'Ya. Audit, koordinasi, dan pengerjaan dilakukan online. Klien di sekitar Yogyakarta bisa bertemu langsung bila diperlukan.',
+	},
+	{
+		q: 'Siapa pemilik kode setelah proyek selesai?',
+		a: 'Anda. Seluruh kode, repositori Git, dan dokumentasi diserahkan ke Anda saat serah terima.',
+	},
+];
+
+const jsonLd = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'Service',
+		name: 'Jasa Migrasi PHP ke Laravel',
+		serviceType: 'Migrasi aplikasi web PHP native dan CodeIgniter ke Laravel',
+		description,
+		url: pageUrl,
+		areaServed: { '@type': 'Country', name: 'Indonesia' },
+		audience: { '@type': 'BusinessAudience', name: 'Sekolah, kampus, UMKM, koperasi, dan yayasan' },
+		provider: {
+			'@type': 'ProfessionalService',
+			name: 'Sulih',
+			url: SITE_URL,
+			image: `${SITE_URL}/og/sulih.jpg`,
+			founder: { '@type': 'Person', name: OWNER_NAME },
+			address: { '@type': 'PostalAddress', addressLocality: CITY, addressCountry: 'ID' },
+		},
+		offers: {
+			'@type': 'Offer',
+			name: 'Audit aplikasi PHP gratis',
+			price: '0',
+			priceCurrency: 'IDR',
+		},
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{ '@type': 'ListItem', position: 1, name: 'Beranda', item: `${SITE_URL}/` },
+			{ '@type': 'ListItem', position: 2, name: 'Jasa Migrasi PHP ke Laravel', item: pageUrl },
+		],
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: faqs.map((f) => ({
+			'@type': 'Question',
+			name: f.q,
+			acceptedAnswer: { '@type': 'Answer', text: f.a },
+		})),
+	},
+];
+---
+
+<BaseLayout
+	title={title}
+	description={description}
+	image="/og/jasa-migrasi-php-ke-laravel.jpg"
+	imageAlt="Jasa migrasi PHP ke Laravel oleh Sulih: bertahap per modul, data tetap utuh"
+	jsonLd={jsonLd}
+>
+	<!-- Hero -->
+	<section class="wrap grid items-center gap-12 *:min-w-0 pt-10 pb-16 md:pt-16 lg:grid-cols-[1.05fr_1fr] lg:pb-24">
+		<div>
+			<nav aria-label="Breadcrumb" class="mb-6 text-sm text-ink-faint">
+				<a href="/" class="hover:text-ink">Beranda</a>
+				<span aria-hidden="true" class="mx-1.5">/</span>
+				<span aria-current="page">Jasa migrasi PHP ke Laravel</span>
+			</nav>
+			<h1>Jasa Migrasi PHP ke Laravel yang Aman dan Bertahap</h1>
+			<p class="lead mt-6 measure">
+				Aplikasi PHP native atau CodeIgniter lama Anda dipindahkan ke Laravel modul demi modul. Data tetap utuh,
+				pengguna tetap bisa bekerja, dan seluruh kodenya rapi di Git.
+			</p>
+			<div class="mt-8 flex flex-wrap gap-3">
+				<a href={waLink(auditMessage)} class="btn btn-primary" target="_blank" rel="noopener noreferrer"
+					>Minta audit gratis via WhatsApp</a
+				>
+				<a href="#tahapan" class="btn btn-ghost">Lihat tahapan kerja</a>
+			</div>
+			<ul class="mt-8 grid gap-2 text-[0.98rem] text-ink-soft sm:grid-cols-3 sm:gap-4">
+				<li class="flex gap-2"><span aria-hidden="true" class="font-bold text-add">+</span>Audit awal gratis</li>
+				<li class="flex gap-2"><span aria-hidden="true" class="font-bold text-add">+</span>Garansi bug 30 hari</li>
+				<li class="flex gap-2"><span aria-hidden="true" class="font-bold text-add">+</span>Kode jadi milik Anda</li>
+			</ul>
+		</div>
+		<div>
+			<CodeDiff from="siswa.php" to="SiswaController.php" lines={[...diffLines]} animate />
+			<p class="mt-3 text-[0.92rem] leading-relaxed text-ink-faint">
+				Baris merah dari PHP native: fungsi <code class="font-mono">mysql_*</code> sudah dihapus sejak PHP 7 dan inputnya rawan SQL injection. Baris hijau:
+				versi Laravel dengan Eloquent yang aman dari celah itu.
+			</p>
+		</div>
+	</section>
+
+	<!-- Tanda -->
+	<section class="bg-mist py-16 md:py-24" aria-labelledby="tanda">
+		<div class="wrap">
+			<div class="measure">
+				<h2 id="tanda">Tanda aplikasi PHP Anda perlu dimigrasi</h2>
+				<p class="mt-4 text-ink-soft">
+					Kalau dua atau lebih tanda ini terasa akrab, migrasi biasanya lebih murah dalam jangka panjang daripada terus
+					menambal.
+				</p>
+			</div>
+			<ul class="mt-10 grid gap-x-12 gap-y-8 md:grid-cols-2">
+				{
+					signs.map((s) => (
+						<li class="grid grid-cols-[1.5rem_1fr] gap-x-3">
+							<span aria-hidden="true" class="font-mono text-xl leading-7 font-bold text-del">
+								-
+							</span>
+							<div>
+								<h3>{s.title}</h3>
+								<p class="mt-1.5 text-ink-soft">{s.body}</p>
+							</div>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</section>
+
+	<!-- Hasil -->
+	<section class="wrap py-16 md:py-24" aria-labelledby="hasil">
+		<div class="measure">
+			<h2 id="hasil">Yang Anda terima setelah migrasi</h2>
+			<p class="mt-4 text-ink-soft">Bukan hanya kode baru, tetapi aplikasi yang bisa dirawat siapa pun yang paham Laravel.</p>
+		</div>
+		<ul class="mt-10 grid gap-x-12 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
+			{
+				results.map((r) => (
+					<li class="grid grid-cols-[1.5rem_1fr] gap-x-3 border-t-2 border-line pt-5">
+						<span aria-hidden="true" class="font-mono text-xl leading-7 font-bold text-add">
+							+
+						</span>
+						<div>
+							<h3>{r.title}</h3>
+							<p class="mt-1.5 text-ink-soft">{r.body}</p>
+						</div>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<!-- Tahapan -->
+	<section id="tahapan" class="scroll-mt-6 bg-ink py-16 text-[#dbe3f0] md:py-24" aria-labelledby="tahapan-judul">
+		<div class="wrap grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+			<div>
+				<h2 id="tahapan-judul" class="text-white">Enam tahapan migrasi, modul demi modul</h2>
+				<p class="mt-4 text-[#b9c6da]">
+					Pendekatan ini dikenal sebagai strangler pattern: sistem baru tumbuh di samping sistem lama sampai sistem lama
+					bisa dimatikan tanpa drama.
+				</p>
+				<p class="mt-6">
+					<a href="/blog/migrasi-php-native-ke-laravel/" class="font-semibold text-white underline underline-offset-4 hover:text-[#ffb98a]"
+						>Baca penjelasan lengkap tiap tahap di blog</a
+					>
+				</p>
+			</div>
+			<ol class="grid gap-0">
+				{
+					steps.map((s, i) => (
+						<li class="grid grid-cols-[3rem_1fr] gap-x-4 border-t border-[#2a3a5c] py-6 first:border-t-0 first:pt-0">
+							<span class="text-[1.9rem] leading-none font-extrabold text-[#ff9a5c] tabular-nums">{i + 1}</span>
+							<div>
+								<h3 class="text-white">{s.title}</h3>
+								<p class="mt-1.5 text-[#b9c6da]">{s.body}</p>
+							</div>
+						</li>
+					))
+				}
+			</ol>
+		</div>
+	</section>
+
+	<!-- Segmen -->
+	<section class="wrap py-16 md:py-24" aria-labelledby="untuk-siapa">
+		<div class="measure">
+			<h2 id="untuk-siapa">Untuk siapa layanan ini</h2>
+			<p class="mt-4 text-ink-soft">
+				Lembaga dan usaha yang aplikasinya masih dipakai setiap hari, tetapi dibuat bertahun-tahun lalu dengan PHP native
+				atau CodeIgniter.
+			</p>
+		</div>
+		<dl class="mt-10 grid gap-x-12 gap-y-6 md:grid-cols-2">
+			{
+				segments.map((s) => (
+					<div class="border-l-4 border-orange pl-5">
+						<dt class="text-lg font-bold">{s.title}</dt>
+						<dd class="mt-1 text-ink-soft">{s.body}</dd>
+					</div>
+				))
+			}
+		</dl>
+	</section>
+
+	<!-- Pengalaman -->
+	<section class="bg-mist py-16 md:py-24" aria-labelledby="pengalaman">
+		<div class="wrap grid gap-12 lg:grid-cols-2">
+			<div>
+				<h2 id="pengalaman">Dikerjakan oleh developer yang menangani sistem seperti ini setiap hari</h2>
+				<p class="mt-5 text-ink-soft">
+					Sulih dijalankan oleh {OWNER_NAME}, full-stack developer di {CITY} dengan sekitar empat tahun pengalaman PHP.
+					Pekerjaan sehari-harinya memodernisasi sistem lama ke Laravel dan React, termasuk sistem akademik, kepegawaian,
+					dan penggajian untuk perguruan tinggi.
+				</p>
+				<p class="mt-4 text-ink-soft">
+					Sebelumnya, tiga tahun membangun ERP internal di sebuah pabrik: penggajian, cuti, lembur, pemesanan barang, dan
+					persetujuan bertingkat.
+				</p>
+				<p class="mt-6 text-[0.95rem] text-ink-faint">
+					Laravel, CodeIgniter 3 dan 4, PHP native, MySQL, MariaDB, PostgreSQL, Nginx, React.
+				</p>
+			</div>
+			<blockquote class="self-center border-l-4 border-ink pl-6">
+				<p class="text-[1.3rem] leading-snug font-semibold text-ink">
+					Di salah satu proyek, aplikasi yang sudah lama berjalan di server produksi belum pernah masuk Git. Langkah pertama
+					kami bukan menulis Laravel, tetapi mengecek versi yang benar-benar berjalan, memperbaruinya, lalu memasukkannya ke
+					Git. Dari situ migrasi bisa berjalan tanpa menebak.
+				</p>
+				<footer class="mt-4 text-ink-soft">Catatan dari proyek modernisasi sistem kampus</footer>
+			</blockquote>
+		</div>
+	</section>
+
+	<!-- Biaya -->
+	<section id="biaya" class="wrap scroll-mt-6 py-16 md:py-24" aria-labelledby="biaya-judul">
+		<div class="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+			<div>
+				<h2 id="biaya-judul">Berapa biaya migrasi PHP ke Laravel?</h2>
+				<p class="mt-4 text-ink-soft">
+					Tidak ada angka yang jujur sebelum kode dilihat. Karena itu kami mulai dari audit gratis. Hasilnya estimasi tertulis
+					per modul, sehingga Anda bisa memulai dari modul yang paling penting lebih dulu.
+				</p>
+				<a href={waLink(auditMessage)} class="btn btn-primary mt-7" target="_blank" rel="noopener noreferrer"
+					>Jadwalkan audit gratis</a
+				>
+			</div>
+			<div class="overflow-x-auto">
+				<table class="w-full border-collapse text-left">
+					<caption class="sr-only">Faktor yang menentukan biaya migrasi</caption>
+					<thead>
+						<tr class="border-b-2 border-ink">
+							<th scope="col" class="py-3 pr-6 font-bold">Faktor</th>
+							<th scope="col" class="py-3 font-bold">Pengaruhnya</th>
+						</tr>
+					</thead>
+					<tbody>
+						{
+							costFactors.map((c) => (
+								<tr class="border-b border-line align-top">
+									<th scope="row" class="py-4 pr-6 font-semibold">
+										{c.factor}
+									</th>
+									<td class="py-4 text-ink-soft">{c.effect}</td>
+								</tr>
+							))
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section>
+
+	<!-- FAQ -->
+	<section class="wrap pb-8" aria-labelledby="faq">
+		<h2 id="faq">Pertanyaan yang sering diajukan</h2>
+		<div class="mt-8 max-w-3xl divide-y divide-line border-y border-line">
+			{
+				faqs.map((f) => (
+					<details class="group py-5">
+						<summary class="flex cursor-pointer list-none items-start justify-between gap-6 [&::-webkit-details-marker]:hidden">
+							<h3 class="text-[1.12rem]">{f.q}</h3>
+							<span
+								aria-hidden="true"
+								class="mt-0.5 font-mono text-xl leading-none font-bold text-orange transition-transform group-open:rotate-45"
+							>
+								+
+							</span>
+						</summary>
+						<p class="mt-3 max-w-2xl text-ink-soft">{f.a}</p>
+					</details>
+				))
+			}
+		</div>
+	</section>
+
+	<!-- CTA -->
+	<section class="wrap mt-16" aria-labelledby="mulai">
+		<div class="rounded-2xl bg-orange-wash px-6 py-12 md:px-12 md:py-14">
+			<h2 id="mulai">Mulai dari audit gratis</h2>
+			<p class="mt-4 measure text-ink-soft">
+				Ceritakan aplikasi Anda: dibuat dengan apa, dipakai untuk apa, dan masalah yang paling mengganggu. Kami balas dengan
+				langkah awal yang masuk akal, tanpa kewajiban melanjutkan.
+			</p>
+			<div class="mt-7 flex flex-wrap gap-3">
+				<a href={waLink(auditMessage)} class="btn btn-primary" target="_blank" rel="noopener noreferrer"
+					>Minta audit gratis via WhatsApp</a
+				>
+				<a href="/kontak/" class="btn btn-ghost">Kirim detail lewat formulir</a>
+			</div>
+		</div>
+	</section>
+</BaseLayout>

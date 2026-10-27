@@ -1,0 +1,71 @@
+---
+interface Line {
+	type: 'del' | 'add' | 'ctx';
+	text: string;
+}
+interface Props {
+	from: string;
+	to: string;
+	lines: Line[];
+	animate?: boolean;
+}
+const { from, to, lines, animate = false } = Astro.props;
+let addIndex = 0;
+---
+
+<figure class:list={['diff', { 'diff-animate': animate }]}>
+	<figcaption class="diff-head">
+		<span>{from}</span>
+		<span aria-hidden="true">menjadi</span>
+		<span>{to}</span>
+	</figcaption>
+	<div class="diff-body" role="presentation">
+		<code class="block min-w-max">
+			{
+				lines.map((line) => {
+					const sign = line.type === 'del' ? '-' : line.type === 'add' ? '+' : ' ';
+					const step = line.type === 'add' ? `step-${Math.min(addIndex++, 5)}` : undefined;
+					return (
+						<span class:list={['diff-line', `diff-${line.type}`, step]}>
+							<span aria-hidden="true">{sign}</span>
+							<span>{line.text}</span>
+						</span>
+					);
+				})
+			}
+		</code>
+	</div>
+</figure>
+
+<style>
+	@media (prefers-reduced-motion: no-preference) {
+		.diff-animate :global(.diff-add) {
+			animation: rise-add 0.45s ease 1.1s both;
+		}
+		.diff-animate :global(.step-1) {
+			animation-delay: 1.22s;
+		}
+		.diff-animate :global(.step-2) {
+			animation-delay: 1.34s;
+		}
+		.diff-animate :global(.step-3) {
+			animation-delay: 1.46s;
+		}
+		.diff-animate :global(.step-4) {
+			animation-delay: 1.58s;
+		}
+		.diff-animate :global(.step-5) {
+			animation-delay: 1.7s;
+		}
+	}
+	@keyframes rise-add {
+		from {
+			opacity: 0;
+			transform: translateY(4px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+</style>

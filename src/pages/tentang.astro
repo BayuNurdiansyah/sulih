@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { CITY, GITHUB_URL, LANDING_PATH, OWNER_NAME, SITE_URL, waLink } from '../consts';
+
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'AboutPage',
+	url: `${SITE_URL}/tentang/`,
+	mainEntity: {
+		'@type': 'Person',
+		name: OWNER_NAME,
+		jobTitle: 'Full-stack web developer',
+		address: { '@type': 'PostalAddress', addressLocality: CITY, addressCountry: 'ID' },
+		knowsAbout: ['Laravel', 'PHP', 'CodeIgniter', 'React', 'MySQL', 'PostgreSQL'],
+		sameAs: [GITHUB_URL],
+	},
+};
+---
+
+<BaseLayout
+	title="Tentang Sulih dan Developer di Baliknya | Sulih"
+	description="Sulih adalah jasa migrasi aplikasi PHP lama ke Laravel oleh Ahmad Bayu Nurdiansyah, full-stack developer di Yogyakarta dengan empat tahun pengalaman PHP."
+	jsonLd={jsonLd}
+>
+	<article class="wrap pt-12 md:pt-20">
+		<h1 class="max-w-3xl">Tentang Sulih</h1>
+		<div class="prose-sulih mt-8 text-[1.08rem] text-ink-soft">
+			<p class="lead">
+				Sulih berasal dari kata menyulih, yaitu mengganti dengan yang baru. Kami mengganti fondasi aplikasi PHP lama dengan
+				Laravel, tanpa membuang data dan alur kerja yang sudah dipakai bertahun-tahun.
+			</p>
+
+			<h2>Kenapa Sulih ada</h2>
+			<p>
+				Banyak sekolah, UMKM, koperasi, dan yayasan masih menjalankan aplikasi web yang dibuat dengan PHP native atau
+				CodeIgniter 3. Aplikasinya masih dipakai setiap hari, tetapi sulit diubah, rawan celah keamanan, dan developer
+				aslinya sering sudah tidak melanjutkan proyeknya. Membuat ulang dari nol terlalu mahal dan berisiko. Sulih menawarkan
+				jalan tengah: migrasi bertahap per modul.
+			</p>
+
+			<h2>Siapa yang mengerjakan</h2>
+			<p>
+				Sulih dijalankan oleh <strong>{OWNER_NAME}</strong>, full-stack web developer di {CITY}. Sekitar empat tahun
+				bekerja dengan PHP, dan setahun terakhir fokus di Laravel.
+			</p>
+			<ul>
+				<li>
+					Saat ini memodernisasi sistem lama ke Laravel dan React untuk perguruan tinggi: sistem akademik, data dosen dan
+					mahasiswa, penerimaan mahasiswa baru, kepegawaian, dan penggajian.
+				</li>
+				<li>
+					Tiga tahun di sebuah pabrik alat mesin pertanian, dari magang sampai Middle Web Developer, membangun ERP internal
+					untuk penggajian, cuti, lembur, pemesanan barang, dan persetujuan bertingkat. Di sana juga membimbing anak magang.
+				</li>
+				<li>Terbiasa mengelola server Linux dengan Nginx, aaPanel, dan banyak versi PHP dalam satu server.</li>
+				<li>Lulusan program AWS re/Start, dan sedang menempuh Teknik Informatika di Universitas Mercu Buana Yogyakarta.</li>
+			</ul>
+
+			<h2>Cara kami bekerja</h2>
+			<p>
+				Audit dulu, baru estimasi. Kode produksi diamankan ke Git sebelum apa pun diubah. Setiap modul diuji dengan salinan
+				data nyata sebelum dirilis. Penjelasan lengkapnya ada di halaman <a href={LANDING_PATH}
+					>jasa migrasi PHP ke Laravel</a
+				>.
+			</p>
+
+			<p>
+				<a href={waLink()} target="_blank" rel="noopener noreferrer">Hubungi lewat WhatsApp</a> atau lihat kode di
+				<a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">GitHub</a>.
+			</p>
+		</div>
+	</article>
+</BaseLayout>

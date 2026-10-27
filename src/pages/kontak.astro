@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { CITY, GITHUB_URL, WHATSAPP_NUMBER, waLink } from '../consts';
+---
+
+<BaseLayout
+	title="Kontak Sulih: Konsultasi Migrasi Aplikasi ke Laravel"
+	description="Hubungi Sulih untuk audit gratis aplikasi PHP native atau CodeIgniter Anda. Isi formulir singkat, pesan langsung terkirim lewat WhatsApp."
+>
+	<section class="wrap grid gap-12 pt-12 md:pt-20 lg:grid-cols-[0.9fr_1.1fr]">
+		<div>
+			<h1>Ceritakan aplikasi Anda</h1>
+			<p class="lead mt-6 measure">
+				Isi formulir ini, lalu pesannya terbuka di WhatsApp dan tinggal dikirim. Audit awal gratis dan tidak mewajibkan
+				Anda melanjutkan.
+			</p>
+			<dl class="mt-10 space-y-5">
+				<div>
+					<dt class="font-bold">WhatsApp</dt>
+					<dd class="text-ink-soft">
+						<a class="link" href={waLink()} target="_blank" rel="noopener noreferrer">Buka chat langsung</a>
+					</dd>
+				</div>
+				<div>
+					<dt class="font-bold">Lokasi</dt>
+					<dd class="text-ink-soft">{CITY}. Melayani seluruh Indonesia secara online.</dd>
+				</div>
+				<div>
+					<dt class="font-bold">GitHub</dt>
+					<dd class="text-ink-soft">
+						<a class="link" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">BayuNurdiansyah</a>
+					</dd>
+				</div>
+			</dl>
+		</div>
+
+		<form id="form-kontak" data-wa={WHATSAPP_NUMBER} class="grid gap-5 rounded-2xl border-2 border-line p-6 md:p-8">
+			<div class="grid gap-1.5">
+				<label for="nama" class="font-semibold">Nama dan lembaga</label>
+				<input
+					id="nama"
+					name="nama"
+					required
+					autocomplete="organization"
+					placeholder="Contoh: Budi, Koperasi Sejahtera"
+					class="rounded-lg border-2 border-line px-3.5 py-2.5 focus:border-ink focus:outline-none"
+				/>
+			</div>
+			<div class="grid gap-1.5">
+				<label for="teknologi" class="font-semibold">Aplikasi dibuat dengan</label>
+				<select id="teknologi" name="teknologi" class="rounded-lg border-2 border-line bg-paper px-3.5 py-2.5 focus:border-ink focus:outline-none">
+					<option>PHP native</option>
+					<option>CodeIgniter 3</option>
+					<option>CodeIgniter 4</option>
+					<option>Laravel versi lama</option>
+					<option>Belum tahu</option>
+				</select>
+			</div>
+			<div class="grid gap-1.5">
+				<label for="kebutuhan" class="font-semibold">Aplikasinya untuk apa, dan apa masalahnya?</label>
+				<textarea
+					id="kebutuhan"
+					name="kebutuhan"
+					rows="5"
+					required
+					placeholder="Contoh: aplikasi simpan pinjam, masih PHP 5.6, sering error saat cetak laporan."
+					class="rounded-lg border-2 border-line px-3.5 py-2.5 focus:border-ink focus:outline-none"></textarea>
+			</div>
+			<button type="submit" class="btn btn-primary justify-center">Kirim lewat WhatsApp</button>
+			<p class="text-sm text-ink-faint">Data formulir tidak disimpan di situs ini. Pesan langsung dibuka di WhatsApp Anda.</p>
+		</form>
+	</section>
+</BaseLayout>
+
+<script>
+	const form = document.getElementById('form-kontak') as HTMLFormElement | null;
+	form?.addEventListener('submit', (event) => {
+		event.preventDefault();
+		const data = new FormData(form);
+		const text = [
+			'Halo Sulih, saya ingin konsultasi migrasi aplikasi.',
+			`Nama/lembaga: ${data.get('nama')}`,
+			`Teknologi: ${data.get('teknologi')}`,
+			`Kebutuhan: ${data.get('kebutuhan')}`,
+		].join('\n');
+		window.open(`https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+	});
+</script>

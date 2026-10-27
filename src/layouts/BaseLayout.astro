@@ -1,0 +1,27 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+
+type Props = import('astro/types').ComponentProps<typeof BaseHead>;
+const props = Astro.props;
+---
+
+<!doctype html>
+<html lang="id">
+	<head>
+		<BaseHead {...props} />
+	</head>
+	<body class="flex min-h-screen flex-col">
+		<a
+			href="#isi"
+			class="sr-only rounded bg-ink px-4 py-2 font-semibold text-white focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50"
+			>Langsung ke isi</a
+		>
+		<Header />
+		<main id="isi" class="flex-1">
+			<slot />
+		</main>
+		<Footer />
+	</body>
+</html>

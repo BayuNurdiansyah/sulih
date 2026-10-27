@@ -1,59 +1,126 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+import CodeDiff from '../components/CodeDiff.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { CITY, GITHUB_URL, LANDING_PATH, OWNER_NAME, SITE_DESCRIPTION, SITE_TITLE, SITE_URL, waLink } from '../consts';
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
+
+const diffLines = [
+	{ type: 'ctx', text: '// Daftar anggota koperasi' },
+	{ type: 'del', text: "$this->load->model('anggota_model');" },
+	{ type: 'del', text: "$data['anggota'] = $this->anggota_model->get_all();" },
+	{ type: 'del', text: "$this->load->view('anggota/list', $data);" },
+	{ type: 'add', text: "$anggota = Anggota::with('simpanan')->paginate(20);" },
+	{ type: 'add', text: "return view('anggota.index', compact('anggota'));" },
+] as const;
+
+const services = [
+	{
+		title: 'Migrasi PHP native dan CodeIgniter ke Laravel',
+		body: 'Aplikasi lama dipindahkan modul demi modul, data tetap utuh dan pengguna tetap bekerja.',
+		href: LANDING_PATH,
+		cta: 'Lihat layanan migrasi',
+	},
+	{
+		title: 'Upgrade versi PHP dan server',
+		body: 'Untuk aplikasi yang kodenya masih rapi: naik ke versi PHP yang masih didukung, lengkap dengan pengujian.',
+		href: '/kontak/',
+		cta: 'Tanyakan kelayakannya',
+	},
+	{
+		title: 'Perawatan aplikasi bulanan',
+		body: 'Pembaruan keamanan, backup terjadwal, pemantauan error, dan perbaikan kecil.',
+		href: '/kontak/',
+		cta: 'Diskusikan kebutuhan',
+	},
+];
+
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'ProfessionalService',
+	name: 'Sulih',
+	url: `${SITE_URL}/`,
+	logo: `${SITE_URL}/apple-touch-icon.png`,
+	image: `${SITE_URL}/og/sulih.jpg`,
+	description: SITE_DESCRIPTION,
+	founder: { '@type': 'Person', name: OWNER_NAME },
+	address: { '@type': 'PostalAddress', addressLocality: CITY, addressRegion: 'DI Yogyakarta', addressCountry: 'ID' },
+	areaServed: { '@type': 'Country', name: 'Indonesia' },
+	knowsAbout: ['Laravel', 'PHP', 'CodeIgniter', 'Migrasi aplikasi', 'MySQL'],
+	sameAs: [GITHUB_URL],
+};
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to
-				build a personal website, blog, or portfolio with Astro.
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION} jsonLd={jsonLd}>
+	<section class="wrap grid items-center gap-12 *:min-w-0 pt-12 pb-16 md:pt-20 lg:grid-cols-[1.1fr_1fr] lg:pb-24">
+		<div>
+			<h1>Aplikasi PHP lama diperbarui ke Laravel, tanpa mulai dari nol</h1>
+			<p class="lead mt-6 measure">
+				Sulih membantu sekolah, UMKM, koperasi, dan yayasan yang aplikasinya masih dipakai setiap hari tetapi makin sulit
+				dirawat. Sistemnya diganti fondasinya, bukan dibuang.
 			</p>
-			<p>
-				This template comes with a few integrations already configured in your{' '}
-				<code>astro.config.mjs</code> file. You can customize your setup with{' '}
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like
-				Tailwind, React, or Vue to your project.
+			<div class="mt-8 flex flex-wrap gap-3">
+				<a href={LANDING_PATH} class="btn btn-primary">Lihat layanan migrasi</a>
+				<a href={waLink()} class="btn btn-ghost" target="_blank" rel="noopener noreferrer">Chat WhatsApp</a>
+			</div>
+		</div>
+		<CodeDiff from="Anggota.php (CI 3)" to="AnggotaController.php" lines={[...diffLines]} animate />
+	</section>
+
+	<section class="border-t border-line bg-mist py-16 md:py-24" aria-labelledby="layanan">
+		<div class="wrap">
+			<h2 id="layanan" class="measure">Layanan Sulih</h2>
+			<p class="mt-4 measure text-ink-soft">
+				Nama Sulih berasal dari kata menyulih: mengganti dengan yang baru. Itu yang kami lakukan pada aplikasi Anda.
 			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>
-					Edit this page in <code>src/pages/index.astro</code>
-				</li>
-				<li>
-					Edit the site header items in <code>src/components/Header.astro</code>
-				</li>
-				<li>
-					Add your name to the footer in <code>src/components/Footer.astro</code>
-				</li>
-				<li>
-					Check out the included blog posts in <code>src/content/blog/</code>
-				</li>
-				<li>
-					Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code>
-				</li>
+			<ul class="mt-10 grid gap-x-10 gap-y-10 md:grid-cols-3">
+				{
+					services.map((s, i) => (
+						<li class:list={['flex flex-col border-t-4 pt-5', i === 0 ? 'border-orange' : 'border-ink']}>
+							<h3 class="text-[1.25rem]">{s.title}</h3>
+							<p class="mt-2 flex-1 text-ink-soft">{s.body}</p>
+							<a href={s.href} class="link mt-4 self-start">
+								{s.cta}
+							</a>
+						</li>
+					))
+				}
 			</ul>
-			<p>
-				Have fun! If you get stuck, remember to{' '}
-				<a href="https://docs.astro.build/">read the docs</a> or{' '}
-				<a href="https://astro.build/chat">join us on Discord</a> to ask questions.
+		</div>
+	</section>
+
+	<section class="wrap py-16 md:py-24" aria-labelledby="artikel">
+		<div class="flex flex-wrap items-end justify-between gap-4">
+			<h2 id="artikel">Artikel terbaru</h2>
+			<a href="/blog/" class="link">Semua artikel</a>
+		</div>
+		<ul class="mt-8 divide-y divide-line border-y border-line">
+			{
+				posts.map((post) => (
+					<li class="py-6">
+						<a href={`/blog/${post.id}/`} class="group block no-underline">
+							<h3 class="text-[1.3rem] group-hover:text-orange-deep group-hover:underline">{post.data.title}</h3>
+							<p class="mt-2 max-w-3xl text-ink-soft">{post.data.description}</p>
+							<p class="mt-2 text-sm text-ink-faint">
+								<FormattedDate date={post.data.pubDate} />
+							</p>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<section class="wrap" aria-labelledby="mulai">
+		<div class="rounded-2xl bg-ink px-6 py-12 text-[#dbe3f0] md:px-12 md:py-14">
+			<h2 id="mulai" class="text-white">Belum yakin aplikasi Anda perlu dimigrasi?</h2>
+			<p class="mt-4 measure">
+				Kirim gambaran singkat aplikasinya. Kami bantu menilai apakah cukup upgrade versi PHP, perlu migrasi bertahap, atau
+				justru belum perlu diapa-apakan.
 			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out{' '}
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a> by{' '}
-				<a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+			<a href={waLink()} class="btn btn-primary mt-7" target="_blank" rel="noopener noreferrer">Konsultasi gratis</a>
+		</div>
+	</section>
+</BaseLayout>
