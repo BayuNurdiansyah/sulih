@@ -10,7 +10,7 @@ export const OWNER_NAME = 'Ahmad Bayu Nurdiansyah';
 export const CITY = 'Yogyakarta';
 
 // Nomor WhatsApp format internasional tanpa tanda +, misal 6281234567890
-export const WHATSAPP_NUMBER = '628XXXXXXXXXX';
+export const WHATSAPP_NUMBER = '62895363736136';
 export const GITHUB_URL = 'https://github.com/BayuNurdiansyah';
 
 export const LANDING_PATH = '/jasa-migrasi-php-ke-laravel/';
